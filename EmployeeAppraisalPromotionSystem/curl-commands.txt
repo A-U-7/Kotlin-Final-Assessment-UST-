@@ -1,0 +1,221 @@
+# ==========================================
+# EmployeeAppraisalPromotionSystem API - Complete Curl Commands
+# ==========================================
+# Base URL: http://localhost:8085/api/employees
+# Server runs on port 8085 as configured in application.properties
+
+# ==========================================
+# POST /api/employees - Add New Employee
+# ==========================================
+
+# 1. Add a Regular Employee
+curl -X POST "http://localhost:8085/api/employees" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "Alice Cooper",
+    "yearsOfExperience": 4,
+    "rating": 4.3
+  }'
+
+# 2. Add a Manager (Note: Use "Mgr" prefix in name)
+curl -X POST "http://localhost:8085/api/employees" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "Mgr Bob Manager",
+    "yearsOfExperience": 9,
+    "rating": 4.8
+  }'
+
+# 3. Add Employee with High Rating (Should be eligible for promotion)
+curl -X POST "http://localhost:8085/api/employees" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "Carol Williams",
+    "yearsOfExperience": 3,
+    "rating": 4.7
+  }'
+
+# 4. Add Experienced Employee (Should be eligible for promotion)
+curl -X POST "http://localhost:8085/api/employees" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "David Brown",
+    "yearsOfExperience": 7,
+    "rating": 4.0
+  }'
+
+# 5. Add Junior Employee (Not eligible for promotion)
+curl -X POST "http://localhost:8085/api/employees" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "Eva Green",
+    "yearsOfExperience": 2,
+    "rating": 4.1
+  }'
+
+# ==========================================
+# GET /api/employees - Get All Employees
+# ==========================================
+
+# Get all employees
+curl -X GET "http://localhost:8085/api/employees" \
+  -H "Content-Type: application/json"
+
+# With response headers
+curl -i -X GET "http://localhost:8085/api/employees" \
+  -H "Content-Type: application/json"
+
+# ==========================================
+# GET /api/employees/eligible - Get Eligible Employees
+# ==========================================
+
+# Get employees eligible for promotion
+curl -X GET "http://localhost:8085/api/employees/eligible" \
+  -H "Content-Type: application/json"
+
+# With response headers
+curl -i -X GET "http://localhost:8085/api/employees/eligible" \
+  -H "Content-Type: application/json"
+
+# ==========================================
+# GET /api/employees/promotions - Calculate Promotions
+# ==========================================
+
+# Calculate promotions for all employees
+curl -X GET "http://localhost:8085/api/employees/promotions" \
+  -H "Content-Type: application/json"
+
+# With response headers
+curl -i -X GET "http://localhost:8085/api/employees/promotions" \
+  -H "Content-Type: application/json"
+
+# ==========================================
+# POST /api/employees/check-eligibility - Check Promotion Eligibility
+# ==========================================
+
+# Check eligibility with default criteria (rating >= 4.5 OR experience >= 5)
+curl -X POST "http://localhost:8085/api/employees/check-eligibility" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "minRating": 4.5,
+    "minExperience": 5
+  }'
+
+# Check eligibility with custom criteria (higher rating requirement)
+curl -X POST "http://localhost:8085/api/employees/check-eligibility" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "minRating": 4.8,
+    "minExperience": 3
+  }'
+
+# Check eligibility with only experience criteria
+curl -X POST "http://localhost:8085/api/employees/check-eligibility" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "minRating": 5.0,
+    "minExperience": 2
+  }'
+
+# With response headers
+curl -i -X POST "http://localhost:8085/api/employees/check-eligibility" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "minRating": 4.5,
+    "minExperience": 5
+  }'
+
+# Check promotion eligibility for employee with ID 1
+curl -X PUT "http://localhost:8085/api/employees/1/promote" \
+  -H "Content-Type: application/json"
+
+# Check promotion eligibility for employee with ID 2
+curl -X PUT "http://localhost:8085/api/employees/2/promote" \
+  -H "Content-Type: application/json"
+
+# With response headers
+curl -i -X PUT "http://localhost:8085/api/employees/1/promote" \
+  -H "Content-Type: application/json"
+
+# Example with response headers for POST:
+curl -i -X POST "http://localhost:8085/api/employees" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "Test Employee",
+    "yearsOfExperience": 5,
+    "rating": 4.6
+  }'
+
+# ==========================================
+# PowerShell equivalent commands (for Windows)
+# ==========================================
+
+# POST Example (PowerShell):
+# Invoke-RestMethod -Method POST -Uri "http://localhost:8085/api/employees" -ContentType "application/json" -Body '{"name": "Test", "yearsOfExperience": 3, "rating": 4.5}'
+
+# GET Example (PowerShell):
+# Invoke-RestMethod -Method GET -Uri "http://localhost:8085/api/employees" -ContentType "application/json"
+
+# PUT Example (PowerShell):
+# Invoke-RestMethod -Method PUT -Uri "http://localhost:8085/api/employees/1/promote" -ContentType "application/json"
+
+# POST check-eligibility Example (PowerShell):
+# Invoke-RestMethod -Method POST -Uri "http://localhost:8085/api/employees/check-eligibility" -ContentType "application/json" -Body '{"minRating": 4.5, "minExperience": 5}'
+
+# ==========================================
+# Expected Responses:
+# ==========================================
+
+# POST Success Response (200 OK):
+# "Employee [Name] added successfully with ID: [generated-id]"
+#
+# POST Error Response (500 Internal Server Error):
+# "Error adding employee: [error-message]"
+#
+# GET Success Response (200 OK):
+# Array of EmployeeDTO objects in JSON format
+#
+# GET Error Response (500 Internal Server Error):
+# HTTP 500 with empty body
+#
+# POST /check-eligibility Success Response (200 OK):
+# EligibilityCheckResponseDTO JSON object with message, criteria, eligibleEmployees array, totalChecked, and eligibleCount
+#
+# POST /check-eligibility Error Response (500 Internal Server Error):
+# HTTP 500 with empty body
+
+# ==========================================
+# Complete Testing Workflow:
+# ==========================================
+
+# 1. Add test employees using POST commands above
+# 2. Get all employees: GET http://localhost:8085/api/employees
+# 3. Get eligible employees: GET http://localhost:8085/api/employees/eligible
+# 4. Calculate promotions for all: GET http://localhost:8085/api/employees/promotions
+# 5. Check individual employee: PUT http://localhost:8085/api/employees/{id}/promote
+# 6. Check eligibility with custom criteria: POST http://localhost:8085/api/employees/check-eligibility
+
+# ==========================================
+# API Endpoint Summary:
+# ==========================================
+# • POST   /api/employees              - Add new employee
+# • GET    /api/employees              - Get all employees
+# • GET    /api/employees/eligible     - Get employees eligible for promotion
+# • GET    /api/employees/promotions   - Calculate promotions for all employees
+# • POST   /api/employees/check-eligibility - Check promotion eligibility with custom criteria
+# • PUT    /api/employees/{id}/promote - Check promotion eligibility for specific employee
+
+# ==========================================
+# Business Logic Reminder:
+# ==========================================
+# Promotion Eligibility Criteria:
+# • Rating >= 4.5, OR
+# • Years of Experience >= 5
+#
+# Manager Detection:
+# • Employees with "Mgr" prefix in name are treated as managers
+# • Managers inherit from Employee class using SINGLE_TABLE inheritance
+#
+# Data Storage:
+# • H2 Database: jdbc:h2:mem:employedb
+# • Table: employees (shared table for Employee and Manager entities)
